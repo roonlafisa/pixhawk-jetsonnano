@@ -28,5 +28,5 @@ pip3 install matplotlib
 
 Install pymavlink:
 ```
-pip3 install matplotlib
+pip3 install pymavlink
 ```
