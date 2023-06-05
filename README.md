@@ -16,6 +16,11 @@ sudo apt install libxslt-dev
 pip3 install MAVProxy
 ```
 
+Install pymavlink:
+```
+pip3 install pymavlink
+```
+
 Install DroneKit: 
 ```
 pip3 install dronekit
@@ -26,7 +31,4 @@ Install Matplotlib:
 pip3 install matplotlib
 ```
 
-Install pymavlink:
-```
-pip3 install pymavlink
-```
+
