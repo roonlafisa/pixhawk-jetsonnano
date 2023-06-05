@@ -13,22 +13,22 @@ Install DroneKit:
 sudo apt install python3-pip
 sudo apt install libxml2-dev
 sudo apt install libxslt-dev
-pip3 install MAVProxy
+sudo pip3 install MAVProxy
 ```
 
 Install pymavlink:
 ```
-pip3 install pymavlink
+sudo pip3 install pymavlink
 ```
 
 Install DroneKit: 
 ```
-pip3 install dronekit
+sudo pip3 install dronekit
 ```
 
 Install Matplotlib:
 ```
-pip3 install matplotlib
+sudo pip3 install matplotlib
 ```
 
 
