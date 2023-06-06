@@ -66,6 +66,19 @@ def compress_video():
     print('Video compressed successfully')
 
 # now, open the compressed video to see if it is compressed on a new window
+def open_compressed_video():
+    # create a VideoCapture object
+    cap = cv2.VideoCapture('test.jpg')
+    # now, read the video
+    ret, frame = cap.read()
+    # now, display the video
+    cv2.imshow('Compressed Video', frame)
+    # now, release the camera
+    cap.release()
+    # now, destroy all windows
+    cv2.destroyAllWindows()
+    # print a message that the video is compressed
+    print('Compressed video opened successfully')
 
 
 
