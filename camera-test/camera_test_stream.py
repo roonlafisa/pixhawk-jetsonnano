@@ -31,11 +31,12 @@ def open_camera():
     cap = cv2.VideoCapture(0)
 
     # create a title for the window
-    cv2.namedWindow('Camera raw', cv2.WINDOW_NORMAL)
+    cv2.namedWindow('Video Stream')
+    cv2.setWindowTitle('Video Stream', 'Raw Video Stream')
 
     while True:
         ret, frame = cap.read()
-        cv2.imshow('Camera', frame)
+        cv2.imshow('Video Stream', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     cap.release()
@@ -74,7 +75,7 @@ def compress_video():
     print('Video compressed successfully')
 
 # now, call the function to compress the video
-compress_video()
+# compress_video()
 
 # now, create a function to stream the compressed video on a second window on the same computer
 
