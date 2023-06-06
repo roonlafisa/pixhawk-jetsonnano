@@ -55,7 +55,7 @@ def stream_video():
     print('Socket created')
 
     # bind the socket
-    s.bind(('host', port))
+    s.bind((host, port))
     print('Socket bind complete')
 
     # listen to the socket
