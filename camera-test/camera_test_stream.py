@@ -19,7 +19,7 @@ The streamed video shall be received by a computer in the same network
 import cv2, socket, pickle, struct
 
 # define variables
-host = '192.168.10.251'
+host = '192.168.10.193'
 port = 5000
 bit_rate = 1000000
 resolution = (640, 480)
