@@ -36,12 +36,18 @@ def open_camera():
             break
     cap.release()
     cv2.destroyAllWindows()
+    # print a message that the camera is can be opened
+    print('Camera can be opened successfully')
+    
 
 # now, call the function to open the camera
 # open_camera()
 
-# now, create a function which will stream the video using the desired requirements above
-def compress_video():
+# now, create a function which will stream the video using the desired requirements above, 
+# open the video on the host computer, 
+# and display the video on the host computer 
+# and print a message that the streaming is successful
+def stream_video():
     # create a socket
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     print('Socket created')
@@ -57,77 +63,32 @@ def compress_video():
     # accept the connection
     conn, addr = s.accept()
 
-    # start the loop to stream the video
-    data = b""
-    payload_size = struct.calcsize("Q")
-    while True:
-        while len(data) < payload_size:
-            packet = conn.recv(4*1024)
-            if not packet:
-                break
-            data += packet
-        packed_msg_size = data[:payload_size]
-        data = data[payload_size:]
-        msg_size = struct.unpack("Q", packed_msg_size)[0]
+    # open the video on the host computer
+    cap = cv2.VideoCapture(0)
 
-        while len(data) < msg_size:
-            data += conn.recv(4*1024)
-        frame_data = data[:msg_size]
-        data = data[msg_size:]
-        frame = pickle.loads(frame_data)
-        cv2.imshow("RECEIVING VIDEO", frame)
-        key = cv2.waitKey(1) & 0xFF
-        if key == ord('q'):
+    # start the loop to stream the video
+    while True:
+        ret, frame = cap.read()
+        # compress the frame
+        frame = cv2.resize(frame, resolution)
+        # encode the frame
+        data = pickle.dumps(frame)
+        # get the size of the frame
+        message_size = struct.pack("L", len(data))
+        # send the frame size
+        conn.sendall(message_size + data)
+
+        # display the frame
+        cv2.imshow('Streaming Video', frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-    conn.close()
+
+    # close the socket
+    s.close()
 
 # now, call the function to stream the video
-compress_video()
+stream_video()
 
-# now, create a function to confirm that the video is streamed successfully
-# this function will be used to test the streaming and generate error message
-def confirm_streaming():
-    # create a socket
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    print('Socket created')
-
-    # bind the socket
-    s.bind((host, port))
-    print('Socket bind complete')
-
-    # listen to the socket
-    s.listen(10)
-    print('Socket now listening')
-
-    # accept the connection
-    conn, addr = s.accept()
-
-    # start the loop to stream the video
-    data = b""
-    payload_size = struct.calcsize("Q")
-    while True:
-        while len(data) < payload_size:
-            packet = conn.recv(4*1024)
-            if not packet:
-                break
-            data += packet
-        packed_msg_size = data[:payload_size]
-        data = data[payload_size:]
-        msg_size = struct.unpack("Q", packed_msg_size)[0]
-
-        while len(data) < msg_size:
-            data += conn.recv(4*1024)
-        frame_data = data[:msg_size]
-        data = data[msg_size:]
-        frame = pickle.loads(frame_data)
-        cv2.imshow("RECEIVING VIDEO", frame)
-        key = cv2.waitKey(1) & 0xFF
-        if key == ord('q'):
-            break
-    conn.close()
-
-# open a window to show currently streaming video
-confirm_streaming()
 
 # now provide a collection of error messages that may occur for failed streaming
 
