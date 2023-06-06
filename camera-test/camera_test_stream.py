@@ -1,18 +1,17 @@
 '''
-create a code to stream an USB camera over wifi.
-The host device that the program will run is a Jetson Nano.
-The port that camera is connected is video0 (via USB)
-The host computer IP address is 192.168.10.251
-The port that the program will stream is 5000
+Create a code to stream an USB camera over wifi.
+2. The host device that the program will run is a Jetson Nano.
+3. The port that camera is connected is video0 (via USB)
+4. The host computer IP address is defined in a variable
+5. The port that the program will stream is 5000
+6. Use fswebcam package to capture the video
+7. Use mjpeg-streamer to stream the video
+8. The streamed video shall be compressed and in 640x480 resolution
+9. The streaming rate will be constant bit rate of 1 Mbps
+10. The streaming shall be done using wifi connection using UDP protocol=
+11. The streamed video shall be received by a computer in the same network
 
 
-The streamed video shall be compressed and in 640x480 resolution
-The streaming rate will be constant bit rate of 1 Mbps
-The streaming compression shall be done using H.264 codec
-The streaming shall be done using wifi connection using UDP protocol
-The streaming will not required a client connect, the server shall keep streaming without a client connecting to the server
-
-The streamed video shall be received by a computer in the same network
 
 '''
 
@@ -42,63 +41,31 @@ def open_camera():
     
 
 # now, call the function to open the camera
-# open_camera()
+open_camera()
 
-# now, create a function which will stream the video using the desired requirements above, 
-# open the video on the host computer, 
-# and display the video on the host computer 
-# print messages after each step is completed
-# and print a message that the streaming is successful
-def stream_video():
-    # create a socket
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    print('Socket created')
-
-    # bind the socket
-    s.bind((host, port))
-    print('Socket bind complete')
-
-    # listen to the socket
-    s.listen(10)
-    print('Socket now listening')
-
-    # accept the connection
-    conn, addr = s.accept()
-    print('Connection accepted')
-
-    # open the video on the host computer
+# now, compress the video
+def compress_video():
+    # create a VideoCapture object
     cap = cv2.VideoCapture(0)
-    print('Video opened')
+    # set the resolution
+    cap.set(3, resolution[0])
+    cap.set(4, resolution[1])
+    # set the bit rate
+    cap.set(5, bit_rate)
+    # now, read the video
+    ret, frame = cap.read()
+    # now, display the video
+    cv2.imshow('Camera', frame)
+    # now, save the video
+    cv2.imwrite('test.jpg', frame)
+    # now, release the camera
+    cap.release()
+    # now, destroy all windows
+    cv2.destroyAllWindows()
+    # print a message that the video is compressed
+    print('Video compressed successfully')
 
-    # start the loop to stream the video
-    while True:
-        ret, frame = cap.read()
-        # compress the frame
-        frame = cv2.resize(frame, resolution)
-        # encode the frame
-        data = pickle.dumps(frame)
-        # get the size of the frame
-        message_size = struct.pack("L", len(data))
-        # send the frame size
-        conn.sendall(message_size + data)
+# now, open the compressed video to see if it is compressed on a new window
 
-        # display the frame
-        cv2.imshow('Streaming Video', frame)
-        print('Streaming video...')
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    # close the socket
-    s.close()
-    print('Socket closed')
-
-# now, call the function to stream the video
-stream_video()
-
-
-# now provide a collection of error messages that may occur for failed streaming
-
-# error 1: the host computer is not connected to the network
-# error 2: streaming is not successful based on confirm_streaming function
 
 
