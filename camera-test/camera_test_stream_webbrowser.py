@@ -15,7 +15,7 @@ import cv2, socket, pickle, struct, time, os
 
 # define variables
 host = '192.168.10.193'
-port = 5000
+port = 5500
 
 # first, create a function to open the video on the host computer on a see the video
 # this function will be used to test the camera
@@ -43,45 +43,6 @@ def open_camera():
 # the streamed video can be accessed by any computer in the same network using web browser
 # the host and port was previously defined
 
-def stream_video():
-    # create a socket
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    print('Socket created')
-
-    # bind the socket
-    s.bind((host, port))
-
-    # listen to the socket
-    s.listen(5)
-    print('Socket is listening')
-
-    # accept the connection
-    while True:
-        client_socket, addr = s.accept()
-        print('Got connection from', addr)
-
-        # if the connection is accepted, start sending the video
-        if client_socket:
-            vid = cv2.VideoCapture(0)
-
-            while(vid.isOpened()):
-                img, frame = vid.read()
-                a = pickle.dumps(frame)
-                message = struct.pack("Q", len(a))+a
-                client_socket.sendall(message)
-
-                cv2.imshow('Video Stream', frame)
-                key = cv2.waitKey(1) & 0xFF
-                if key == ord('q'):
-                    client_socket.close()
-                    break
-        else:
-            print('No connection')
-            break
-    cv2.destroyAllWindows()
-    vid.release()
-    return
 
 # now, call the function to stream the video
 stream_video()
-
