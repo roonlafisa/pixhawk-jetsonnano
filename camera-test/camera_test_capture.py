@@ -63,3 +63,10 @@ def capture_video():
 
 # now, call the function to capture the video
 capture_video()
+
+# both client and server is in socket now listening state, what is the problem?
+# the problem is that the client is not sending any data to the server
+# the client can ping the server, but the server cannot ping the client
+# the client is not sending any data to the server. how to solve this problem?
+# the client is not sending any data to the server because the client is not connected to the server. how to connect?  
+
