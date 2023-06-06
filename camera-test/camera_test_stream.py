@@ -16,6 +16,7 @@ The streamed video shall be received by a computer in the same network
 '''
 
 # import the necessary packages in one line
+from calendar import c
 import cv2, socket, pickle, struct
 
 # define variables
@@ -124,6 +125,9 @@ def confirm_streaming():
         if key == ord('q'):
             break
     conn.close()
+
+# open a window to show currently streaming video
+confirm_streaming()
 
 # now provide a collection of error messages that may occur for failed streaming
 

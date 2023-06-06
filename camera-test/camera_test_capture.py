@@ -4,10 +4,10 @@ this code will be used to capture the video from the host computer camera to the
 '''
 
 # import the necessary packages
-import cv2, socket, pickle, struct, time, os
+import cv2, socket, pickle, struct, time, os 
 
 # define variables
-host = '192.168.10.251'
+host = '192.168.10.193'
 port = 5000
 
 # create a function to capture the video from the host computer
