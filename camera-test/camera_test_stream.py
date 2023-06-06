@@ -10,6 +10,7 @@ The streamed video shall be compressed and in 640x480 resolution
 The streaming rate will be constant bit rate of 1 Mbps
 The streaming compression shall be done using H.264 codec
 The streaming shall be done using wifi connection using UDP protocol
+The streaming will not required a client connect, the server shall keep streaming without a client connecting to the server
 
 The streamed video shall be received by a computer in the same network
 
@@ -46,6 +47,7 @@ def open_camera():
 # now, create a function which will stream the video using the desired requirements above, 
 # open the video on the host computer, 
 # and display the video on the host computer 
+# print messages after each step is completed
 # and print a message that the streaming is successful
 def stream_video():
     # create a socket
@@ -54,6 +56,10 @@ def stream_video():
 
     # bind the socket
     s.bind((host, port))
+    print('Socket bind complete')
+
+    # bind the socket
+    s.bind(('0.0.0.0', port))
     print('Socket bind complete')
 
     # listen to the socket
