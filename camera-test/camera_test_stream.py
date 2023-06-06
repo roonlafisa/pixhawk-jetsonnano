@@ -37,7 +37,7 @@ def open_camera():
     cap.release()
     cv2.destroyAllWindows()
     # print a message that the camera is can be opened
-    print('Camera can be opened successfully')
+    print('Camera opened successfully')
     
 
 # now, call the function to open the camera
@@ -62,9 +62,11 @@ def stream_video():
 
     # accept the connection
     conn, addr = s.accept()
+    print('Connection accepted')
 
     # open the video on the host computer
     cap = cv2.VideoCapture(0)
+    print('Video opened')
 
     # start the loop to stream the video
     while True:
@@ -80,11 +82,13 @@ def stream_video():
 
         # display the frame
         cv2.imshow('Streaming Video', frame)
+        print('Streaming video...')
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
     # close the socket
     s.close()
+    print('Socket closed')
 
 # now, call the function to stream the video
 stream_video()
