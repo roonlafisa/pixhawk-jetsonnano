@@ -46,38 +46,58 @@ def open_camera():
     
 
 # now, call the function to open the camera
-open_camera()
+# open_camera()
 
-# now, compress the video
-def compress_video():
-    # create a VideoCapture object
+# now, create a function to stream the video from the host computer to open network using UDP protocol over wifi, 
+# the host and port was previously defined
+def stream_video():
+    # create a socket
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    print('Socket created')
+
+    # bind the socket
+    s.bind((host, port))
+
+    # listen to the socket 
+    s.listen(10)
+    print('Socket now listening')
+
+    # accept the connection
+    conn, addr = s.accept()
+    print('Connection accepted')
+
+    # create a video capture object
     cap = cv2.VideoCapture(0)
-
-    # create a title for the window
-    cv2.namedWindow('Compressed video', cv2.WINDOW_NORMAL)
 
     # set the resolution
     cap.set(3, resolution[0])
     cap.set(4, resolution[1])
+
     # set the bit rate
     cap.set(5, bit_rate)
-    # now, read the video
-    ret, frame = cap.read()
-    # now, display the video
-    cv2.imshow('Camera', frame)
-    # now, save the video
-    cv2.imwrite('test.jpg', frame)
-    # now, release the camera
+    
+    # create a title for the window
+    cv2.namedWindow('Video Stream')
+    cv2.setWindowTitle('Video Stream', 'Streamed Video')
+
+    # start the loop to stream the video, as well as open the video on host computer
+    while True:
+        ret, frame = cap.read()
+        # serialize the frame
+        data = pickle.dumps(frame)
+
+        # send the serialized frame
+        conn.sendall(struct.pack("Q", len(data))+data)
+
+        # display the frame
+        cv2.imshow('Video Stream', frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
     cap.release()
-    # now, destroy all windows
     cv2.destroyAllWindows()
-    # print a message that the video is compressed
-    print('Video compressed successfully')
-
-# now, call the function to compress the video
-# compress_video()
-
-# now, create a function to stream the compressed video on a second window on the same computer
+    # print a message that the video is streamed
+    print('Video streamed successfully')
 
 
-
+# now, call the function to stream the video
+stream_video()
